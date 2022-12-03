@@ -3,7 +3,7 @@
 if ($api == 'produtos') {
     if ($method == 'GET' && $action == 'listar') {
         $db = DB::connect();
-        $query = $db->prepare("SELECT * FROM produtos");
+        $query = $db->prepare('SELECT * FROM produtos');
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
 

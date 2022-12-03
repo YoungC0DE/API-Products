@@ -1,6 +1,6 @@
 <?php
 class DB {
     public static function connect(){
-        return new PDO("sqlite:database.db3");
+        return new PDO("sqlite:config/.database.db3");
     }
 }
