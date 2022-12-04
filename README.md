@@ -23,46 +23,30 @@ ajudando a organizar algum carrinho de compras.
 
 ## Como implementar usando javascript vanilla
 
-```js
-  function login() {
-    const data = {
-      email: 'seuemail@email.com',
-      senha: 'suasenha'
-    }
-    axios.post(`${url_base}/usuarios/login`, data)
-    .then(resp => console.log(resp))
-    .catch(e => console.log(e))
+schema para o endpoint **/produtos/register/**:
+```json 
+  {
+    "id_usuario": 1,
+    "nome": "Arroz",
+    "quantidade": 2,
+    "medida": "Pacotes",
+    "valor": 3.50
   }
-  
-  function cadastro_usuario() {
-    const data = {
-      email: 'seuemail@email.com',
-      senha: 'suasenha'
-    }
-    axios.post(`${url_base}/usuarios/register`, data)
-    .then(resp => console.log(resp))
-    .catch(e => console.log(e))
+```
+
+schema para o endpoint **/usuarios/register/**:
+```json 
+  {
+    "nome": "usuario",
+    "email": "exemplo@email.com",
+    "senha": "12345"
   }
-  
-  function cadastro_produto() {
-    const data = {
-      nome: 'produto1',
-      quantidade: 2,
-      medida: 'unidade',
-      valor: 3.50
-    }
-    axios.post(`${url_base}/produtos/register`, data)
-    .then(resp => console.log(resp))
-    .catch(e => console.log(e))
-  }
-  
-  async function produtos_lista() {
-    await const produtos = axios.get(`${url_base}/produtos/list`)
-    return produtos // json
-  }
-  
-  async function produtos_total() {
-    await const total = axios.get(`${url_base}/produtos/total`)
-    return total // json
+```
+
+schema para o endpoint **/usuarios/login/**:
+```json 
+  {
+    "email": "exemplo@email.com",
+    "senha": "12345",
   }
 ```
