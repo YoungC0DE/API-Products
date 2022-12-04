@@ -1,6 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-type: application/json');
+header('Accept: application/json');
 
 date_default_timezone_set("America/Sao_Paulo");
 
