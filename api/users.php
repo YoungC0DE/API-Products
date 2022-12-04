@@ -22,7 +22,7 @@ if ($api == 'usuarios') {
         $senha = array_values($_POST)[2];
 
         $db = DB::connect();
-        $query = $db->prepare("INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email' '$senha')";
+        $query = $db->prepare("INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email' '$senha')");
         $result = $query->execute();
 
         if ($result) {
