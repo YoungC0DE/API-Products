@@ -21,9 +21,7 @@ pois o sistema irá trazer os produtos com base no usuario logado.
 Este projeto servirá como uma lista de compras, 
 ajudando a organizar algum carrinho de compras.
 
-## Como implementar usando javascript vanilla
-
-schema para o endpoint **/produtos/register/**:
+### schema para o endpoint **/produtos/register/**
 ```json 
   {
     "id_usuario": 1,
@@ -34,7 +32,7 @@ schema para o endpoint **/produtos/register/**:
   }
 ```
 
-schema para o endpoint **/usuarios/register/**:
+### schema para o endpoint **/usuarios/register/**
 ```json 
   {
     "nome": "usuario",
@@ -43,7 +41,7 @@ schema para o endpoint **/usuarios/register/**:
   }
 ```
 
-schema para o endpoint **/usuarios/login/**:
+### schema para o endpoint **/usuarios/login/**
 ```json 
   {
     "email": "exemplo@email.com",
