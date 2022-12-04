@@ -1,7 +1,7 @@
 <?php
 
 if ($api == 'produtos') {
-    if ($method == 'GET' && $action == 'listar') {
+    if ($method == 'GET' && $action == 'list') {
         $db = DB::connect();
         $query = $db->prepare('SELECT * FROM produtos');
         $query->execute();
@@ -25,7 +25,7 @@ if ($api == 'produtos') {
             echo json_encode(['dados' => 'Nenhum produto encontrado!']);
         }
     }
-    else if ($method == 'POST' && $action == 'criar') {
+    else if ($method == 'POST' && $action == 'register') {
         $nome = array_values($_POST)[0];
         $quantidade = intval(array_values($_POST)[1]);
         $medida = array_values($_POST)[2];
@@ -41,7 +41,7 @@ if ($api == 'produtos') {
             echo json_encode(['dados' => 'Erro ao adicionar produtos']);
         }
     }
-    else if ($method == 'DELETE' && $action == 'deletar' && $param != '') {
+    else if ($method == 'DELETE' && $action == 'delete' && $param != '') {
         $db = DB::connect();
         $query = $db->prepare("DELETE FROM produtos WHERE id = $param");
         $result = $query->execute();
