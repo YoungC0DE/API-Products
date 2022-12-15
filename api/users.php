@@ -6,7 +6,7 @@ if ($api == 'usuarios') {
 
         $email = $data->email;
         $senha = $data->senha;
-
+        
         $db = DB::connect();
 
         $query = $db->prepare("SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'");
