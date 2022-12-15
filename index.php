@@ -6,8 +6,12 @@ header('Content-type: application/json');
 
 date_default_timezone_set("America/Sao_Paulo");
 
-if (!isset($_GET['path']) || isset($path[0])) {
-    echo json_encode(['message' => 'Rota não encontrada']);
+ini_set('display_errors', 1);
+ini_set('display_startup_erros', 1);
+error_reporting(E_ALL);
+
+if (!isset($_GET['path'])) {
+    echo json_encode(['message' => 'Rota não encontrada', 'code' => 404]);
     exit;
 }
 
