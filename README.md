@@ -7,12 +7,13 @@ Nesta API teremos as seguintes funcionalidades:
 
 | metodo | end point          |
 |--------|--------------------|
-| [POST] |  usuarios/register |
-| [POST] |  usuarios/login    |
-| [POST] |  produtos/register |
-| [GET]  |  produtos/list     |
-| [GET]  |  produtos/total    |
-| [DELETE] |  produtos/detete/{id} |
+| [POST] |  /usuarios/register |
+| [POST] |  /usuarios/login |
+| [POST] |  /produtos/register/{id_usuario} |
+| [GET]  |  /produtos/list/{id_usuario} |
+| [GET]  |  /produtos/total/{id_usuario} |
+| [DELETE] |  /produtos/detete/{id_usuario} |
+| [DELETE] |  /usuario/detete |
 
 url_base: http://apiprodutosphp.dev.br
 
@@ -43,6 +44,14 @@ ajudando a organizar algum carrinho de compras.
 ```
 
 ### schema para o endpoint **/usuarios/login/**
+```json 
+  {
+    "email": "exemplo@email.com",
+    "senha": "12345",
+  }
+```
+
+### schema para o endpoint **/usuarios/delete/**
 ```json 
   {
     "email": "exemplo@email.com",
