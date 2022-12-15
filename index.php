@@ -7,7 +7,7 @@ header('Content-type: application/json');
 date_default_timezone_set("America/Sao_Paulo");
 
 if (!isset($_GET['path']) || isset($path[0])) {
-    echo json_encode(['message' => 'Caminho não encontrado']);
+    echo json_encode(['message' => 'Rota não encontrada']);
     exit;
 }
 
