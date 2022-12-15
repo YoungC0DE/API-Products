@@ -12,8 +12,9 @@ Nesta API teremos as seguintes funcionalidades:
 | [POST] |  produtos/register |
 | [GET]  |  produtos/list     |
 | [GET]  |  produtos/total    |
+| [DELETE] |  produtos/detete/{id} |
 
-url_base: https://produtosconsulta2.000webhostapp.com
+url_base: http://apiprodutosphp.dev.br
 
 É necessário estar logado antes de consumir os outros end-points, 
 pois o sistema irá trazer os produtos com base no usuario logado.
