@@ -15,7 +15,7 @@ Nesta API teremos as seguintes funcionalidades:
 | [DELETE] |  /produtos/detete/{id_usuario} |
 | [DELETE] |  /usuario/detete |
 
-url_base: http://apiprodutosphp.dev.br
+url_base: https://apiprodutosphp.dev.br
 
 É necessário estar logado antes de consumir os outros end-points, 
 pois o sistema irá trazer os produtos com base no usuario logado.
