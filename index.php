@@ -16,12 +16,13 @@ if (!isset($_GET['path'])) {
 }
 
 $path = explode("/", $_GET['path']);
-$api = isset($path[0]) ? $path[0] : '';
-$action = isset($path[1]) ? $path[1] : '';
-$param = isset($path[2]) ? $path[2] : '';
+
+$api = isset($path[1]) ? $path[1] : '';
+$action = isset($path[2]) ? $path[2] : '';
+$param = isset($path[3]) ? $path[3] : '';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 include_once "config/connection.php";
-include_once 'api/products.php';
-include_once 'api/users.php';
+include_once "api/products.php";
+include_once "api/users.php";
