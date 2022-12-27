@@ -32,9 +32,9 @@ if ($api == 'usuarios') {
 
         $remov = array("'", "\\", "-", "(", ")");
 
-        $nome = trim(str_replace($remov, "", $data->nome));
-        $email = trim(str_replace($remov, "", $data->email));
-        $senha = trim(str_replace($remov, "", $data->senha));
+        $nome = trim($data->nome);
+        $email = strtolower(trim(str_replace($remov, "", $data->email)));
+        $senha = trim($data->senha);
 
         if ($nome == '' || $email == '' || $senha == '') {
             //http_response_code(401);

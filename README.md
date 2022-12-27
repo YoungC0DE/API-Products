@@ -34,6 +34,13 @@ ajudando a organizar algum carrinho de compras.
   }
 ```
 
+### schema para o endpoint **/produtos/delete/{id_produto}**
+```json 
+  {
+    "id_user": 1,
+  }
+```
+
 ### schema para o endpoint **/usuarios/register/**
 ```json 
   {

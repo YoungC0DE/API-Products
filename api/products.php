@@ -37,10 +37,10 @@ if ($api == 'produtos') {
 
         $remov = array("'", ".", "\\", "-", "(", ")");
 
-        $nome = ucfirst(trim(str_replace($remov, "", $data->nome)));
-        $quantidade = ucfirst(trim(str_replace($remov, "", $data->quantidade)));
-        $medida = ucfirst(trim(str_replace($remov, "", $data->medida)));
-        $valor = ucfirst(trim(str_replace($remov, "", $data->valor)));
+        $nome = strtolower(trim(str_replace($remov, "", $data->nome)));
+        $quantidade = $data->quantidade;
+        $medida = strtolower(trim(str_replace($remov, "", $data->medida)));
+        $valor = intval(trim(str_replace($remov, "", $data->valor)));
 
 
         $query = $db->prepare("SELECT * FROM produtos WHERE nome = '$nome' and fk_usuario = $param");
@@ -78,7 +78,7 @@ if ($api == 'produtos') {
             exit;
         }
 
-        $query = $db->prepare("DELETE FROM produtos WHERE id = $param AND fk_usuario = '$id'");
+        $query = $db->prepare("DELETE FROM produtos WHERE id = $param AND fk_usuario = $id");
         $result = $query->execute();
 
         if (!$result) {
