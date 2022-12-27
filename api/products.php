@@ -1,9 +1,9 @@
 <?php
+$db = DB::connect();
 
 if ($api == 'produtos') {
     if ($method == 'GET' && $action == 'list' && $param != '') {
-        $db = DB::connect();
-        $query = $db->prepare('SELECT p.* FROM produtos p JOIN usuarios u ON p.fk_usuario = u.id WHERE u.id = ' . $param);
+        $query = $db->prepare("SELECT p.* FROM produtos p JOIN usuarios u ON p.fk_usuario = u.id WHERE u.id = $param");
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -15,17 +15,10 @@ if ($api == 'produtos') {
         //http_response_code(200);
         echo json_encode(['message' => 'Consulta realizada com sucesso', 'dados' => $result, 'code' => 200]);
     } else if ($method == 'GET' && $action == 'total' && $param != '') {
-        $db = DB::connect();
 
         $query = $db->prepare("SELECT id FROM usuarios where id = $param");
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!$result) {
-            echo json_encode(['message' => 'Usuário informado não existe!', 'code' => 401]);
-            //http_response_code(404);
-            exit;
-        }
 
         $query = $db->prepare("SELECT SUM(quantidade * valor) as total FROM produtos where fk_usuario = $param");
         $query->execute();
@@ -42,12 +35,13 @@ if ($api == 'produtos') {
     } else if ($method == 'POST' && $action == 'register' && $param != '') {
         $data = json_decode(file_get_contents('php://input'));
 
-        $nome = $data->nome;
-        $quantidade = $data->quantidade;
-        $medida = $data->medida;
-        $valor = $data->valor;
+        $remov = array("'", ".", "\\", "-", "(", ")");
 
-        $db = DB::connect();
+        $nome = ucfirst(trim(str_replace($remov, "", $data->nome)));
+        $quantidade = ucfirst(trim(str_replace($remov, "", $data->quantidade)));
+        $medida = ucfirst(trim(str_replace($remov, "", $data->medida)));
+        $valor = ucfirst(trim(str_replace($remov, "", $data->valor)));
+
 
         $query = $db->prepare("SELECT * FROM produtos WHERE nome = '$nome' and fk_usuario = $param");
         $query->execute();
@@ -66,12 +60,15 @@ if ($api == 'produtos') {
             //http_response_code(400);
             exit;
         }
+
         echo json_encode(['message' => 'Produtos adicionados com sucesso!', 'code' => 200]);
         //http_response_code(200);
     } else if ($method == 'DELETE' && $action == 'delete' && $param != '') {
-        $db = DB::connect();
+        $data = json_decode(file_get_contents('php://input'));
 
-        $query = $db->prepare("SELECT id FROM produtos WHERE id = $param");
+        $id = $data->id_user;
+
+        $query = $db->prepare("SELECT id FROM produtos WHERE id = $param AND fk_usuario = $id");
         $query->execute();
         $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -81,7 +78,7 @@ if ($api == 'produtos') {
             exit;
         }
 
-        $query = $db->prepare("DELETE FROM produtos WHERE id = $param");
+        $query = $db->prepare("DELETE FROM produtos WHERE id = $param AND fk_usuario = '$id'");
         $result = $query->execute();
 
         if (!$result) {

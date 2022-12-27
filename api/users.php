@@ -4,8 +4,10 @@ if ($api == 'usuarios') {
     if ($method == 'POST' && $action == 'login') {
         $data = json_decode(file_get_contents('php://input'));
 
-        $email = $data->email;
-        $senha = $data->senha;
+        $remov = array("'", "\\", "-", "(", ")");
+
+        $email = trim(str_replace($remov, "", $data->email));
+        $senha = trim(str_replace($remov, "", $data->senha));
 
         $db = DB::connect();
 
@@ -28,9 +30,11 @@ if ($api == 'usuarios') {
     } else if ($method == 'POST' && $action == 'register') {
         $data = json_decode(file_get_contents('php://input'));
 
-        $nome = trim($data->nome);
-        $email = trim($data->email);
-        $senha = trim($data->senha);
+        $remov = array("'", "\\", "-", "(", ")");
+
+        $nome = trim(str_replace($remov, "", $data->nome));
+        $email = trim(str_replace($remov, "", $data->email));
+        $senha = trim(str_replace($remov, "", $data->senha));
 
         if ($nome == '' || $email == '' || $senha == '') {
             //http_response_code(401);
