@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 
 if (!isset($_GET['path'])) {
     http_response_code(404);
-    echo json_encode(['message' => 'Rota não encontrada']);
+    echo json_encode(['message' => 'Not found']);
     
 }
 // domain/api/action/{param}
@@ -37,6 +37,6 @@ if ($api === 'products') include_once "api/products.php";
 if ($api === 'user') include_once "api/users.php";
 else {
     http_response_code(404);
-    echo json_encode(['message' => 'Rota não encontrada']);
+    echo json_encode(['message' => 'Not found']);
     exit;
 }
