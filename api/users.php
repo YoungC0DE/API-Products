@@ -1,113 +1,121 @@
 <?php
 
-if ($api == 'usuarios') {
-    if ($method == 'POST' && $action == 'login') {
-        $data = json_decode(file_get_contents('php://input'));
+// connecting on database..
+$db = DB::connect();
 
-        $remov = array("'", "\\", "-", "(", ")");
+// get all request data
+$data = json_decode(file_get_contents('php://input'));
 
-        $email = trim(str_replace($remov, "", $data->email));
-        $senha = trim(str_replace($remov, "", $data->senha));
+// defines what i need to replace
+$remov = array("'", "\\", "-", "(", ")");
 
-        $db = DB::connect();
+// set my variables to use on my queries
+$id_user  = !empty($data->id_user) ? intval(trim($data->id_user)) : '';
+$name     = !empty($data->name)     ? trim(str_replace($remov, "", $data->name)) : '';
+$email    = !empty($data->email)    ? trim(strtolower(str_replace($remov, "", $data->email))) : '';
+$password = !empty($data->password) ? base64_encode(trim(str_replace($remov, "", $data->password))) :  '';
+$avatar   = !empty($data->avatar)   ?? 'https://www.acnmoda.com.br/img/user-default.png';  
 
-        $query = $db->prepare("SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'");
-        $query->execute();
-        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+if ($method == 'POST' && $action == 'login') {
 
-        if (!$result) {
-            //http_response_code(400);
-            echo json_encode(['message' => 'Usuário ou senha incorretos!', 'code' => 400]);
-            exit;
-        }
+    $query = $db->prepare("SELECT * FROM users WHERE email = '$email' AND password = '$password'");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        $token = $db->prepare("SELECT id, nome, acesso FROM usuarios WHERE email = '$email' AND senha = '$senha'");
-        $token->execute();
-        $result2 = $token->fetchAll(PDO::FETCH_ASSOC);
-
-        //http_response_code(200);
-        echo json_encode(['message' => 'Logado com sucesso!', 'dados' => $result2, 'code' => 200]);
-    } else if ($method == 'POST' && $action == 'register') {
-        $data = json_decode(file_get_contents('php://input'));
-
-        $remov = array("'", "\\", "-", "(", ")");
-
-        $nome = trim($data->nome);
-        $email = strtolower(trim(str_replace($remov, "", $data->email)));
-        $senha = trim($data->senha);
-
-        if ($nome == '' || $email == '' || $senha == '') {
-            //http_response_code(401);
-            echo json_encode(['message' => 'Informe todas as credenciais', 'code' => 401]);
-            exit;
-        }
-
-        $db = DB::connect();
-
-        $query = $db->prepare("SELECT * FROM usuarios WHERE email = '$email'");
-        $query->execute();
-        $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($resultVerify) {
-            //http_response_code(401);
-            echo json_encode(['message' => 'O login já existe!', 'code' => 401]);
-            exit;
-        }
-
-        $query = $db->prepare("INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')");
-        $result = $query->execute();
-
-        if (!$result) {
-            //http_response_code(400);
-            echo json_encode(['message' => 'Erro ao criar login!', 'code' => 400]);
-            exit;
-        }
-        //http_response_code(200);
-        echo json_encode(['message' => 'Login criado com sucesso!', 'code' => 200]);
-    } else if ($method == 'GET' && $action == 'list') {
-        $db = DB::connect();
-
-        $query = $db->prepare("SELECT id, nome, email, acesso FROM usuarios");
-        $query->execute();
-        $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!$result) {
-            //http_response_code(404);
-            echo json_encode(['message' => 'Nenhum usuário encontrado!', 'code' => 404]);
-            exit;
-        }
-        //http_response_code(200);
-        echo json_encode(['message' => 'Consulta realizada com sucesso', 'dados' => $result, 'code' => 200]);
-    } else if ($method == 'DELETE' && $action == 'delete') {
-        $data = json_decode(file_get_contents('php://input'));
-
-        $email = $data->email;
-        $senha = $data->senha;
-
-        $db = DB::connect();
-
-        $query = $db->prepare("SELECT * FROM usuarios WHERE email = '$email' and senha = '$senha'");
-        $query->execute();
-        $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!$resultVerify) {
-            //http_response_code(404);
-            echo json_encode(['message' => 'Usuario não existe!', 'code' => 401]);
-            exit;
-        }
-        $query = $db->prepare("DELETE FROM usuarios WHERE email = '$email' and senha = '$senha'");
-        $result = $query->execute();
-
-        if (!$result) {
-            echo json_encode(['message' => 'Erro ao deletar conta!', 'code' => 400]);
-            //http_response_code(400);
-            exit;
-        }
-
-        echo json_encode(['message' => 'Conta deletada com sucesso!', 'code' => 200]);
-        //http_response_code(200);
-    } else {
-        echo json_encode(['message' => 'Caminho não encontrado', 'code' => 404]);
-        //http_response_code(404);
+    if (!$result) {
+        http_response_code(401);
+        echo json_encode(['message' => 'Email or password incorrect!']);
+        exit;
     }
+
+    http_response_code(200);
+    echo json_encode(['message' => 'successfully logged in', 'data' => $result]);
+    exit;
+
+} else if ($method == 'POST' && $action == 'register') {
+
+    if ($name == '' || $email == '' || $password == '') {
+        http_response_code(403);
+        echo json_encode(['message' => 'Provide all credentials']);
+        exit;
+    }
+
+    $query = $db->prepare("SELECT id FROM users WHERE email = '$email'");
+    $query->execute();
+    $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($resultVerify) {
+        http_response_code(401);
+        echo json_encode(['message' => 'User already exists']);
+        exit;
+    }
+
+    $query = $db->prepare("INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password')");
+    $result = $query->execute();
+
+    http_response_code(200);
+    echo json_encode(['message' => 'User was created!']);
+    exit;
+
+} else if ($method == 'PUT' && $action == 'edit') {
+    $setters = '';
+
+    if ($name)     $setters .= ",name = '$name'";   
+    if ($password) $setters .= ",password = '$password'";
+    if ($avatar)   $setters .= ",avatar = '$avatar'";
+
+    $setters = ltrim($setters, ',');
+
+    try {
+        $query = $db->prepare("UPDATE users SET $setters WHERE email = '$email'");
+        $result = $query->execute();
+    } catch(Exception $e) {
+        http_response_code(403);
+        echo json_encode(['message' => "$e"]);
+        exit;
+    }
+    
+    http_response_code(200);
+    echo json_encode(['message' => 'User was modified!']);
+    exit;
+
+} else if ($method == 'GET' && $action == 'list') {
+
+    $query = $db->prepare("SELECT * FROM users");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$result) {
+        http_response_code(401);
+        echo json_encode(['message' => 'No users']);
+        exit;
+    }
+
+    http_response_code(200);
+    echo json_encode(['message' => 'Sucessfully', 'data' => $result]);
+    exit;
+
+} else if ($method == 'DELETE' && $action == 'delete') {
+
+    $query = $db->prepare("SELECT id FROM users WHERE email = '$email' AND password = '$password'");
+    $query->execute();
+    $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$resultVerify) {
+        http_response_code(403);
+        echo json_encode(['message' => 'User not exists']);
+        exit;
+    }
+
+    $query = $db->prepare("DELETE FROM users WHERE email = '$email' AND password = '$password'");
+    $result = $query->execute();
+
+    http_response_code(200);
+    echo json_encode(['message' => 'Account was deleted']);
+    exit;
+
+} else {
+    http_response_code(404);
+    echo json_encode(['message' => 'Not found']);
+    exit;
 }
