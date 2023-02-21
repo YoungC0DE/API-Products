@@ -11,8 +11,8 @@ $data = json_decode(file_get_contents('php://input'));
 $remov = array("'", ".", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-$id_prod = !empty($data->id_prod) ? intval($data->id_prod) : '';
-$id_user = !empty($data->id_user) ? intval($data->id_user) : '';
+$id_prod = !empty($data->id_prod) ? intval(trim($data->id_prod)) : '';
+$id_user = !empty($data->id_user) ? intval(trim($data->id_user)) : '';
 $name    = !empty($data->name)    ? strtolower(trim(str_replace($remov, "", $data->name))) : '';
 $amount  = !empty($data->amount)  ? intval(trim($data->amount)) : '';
 $metric  = !empty($data->metric)  ? strtolower(trim(str_replace($remov, "", $data->metric))) : '';
@@ -62,19 +62,24 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'list') {
 
-    echo json_encode(['id_user' => $id_user]);
-    $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
+    try {
+        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
 
-    if (!empty($name)) {
-        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
-    }
+        if (!empty($name)) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
+        }
 
-    $query->execute();
-    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        $query->execute();
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    if (!$result) {
-        http_response_code(400);
-        echo json_encode(['message' => 'No product']);
+        if (!$result) {
+            http_response_code(400);
+            echo json_encode(['message' => 'No product']);
+            exit;
+        }
+    } catch(Exception $e) {
+        http_response_code(403);
+        echo json_encode(['message' => $e]);
         exit;
     }
     
