@@ -2,6 +2,7 @@
 
 // connecting on database..
 $db = DB::connect();
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // get all request data
 $data = json_decode(file_get_contents('php://input'));
@@ -25,7 +26,7 @@ if ($method == 'POST' && $action == 'register') {
 
     if ($resultVerify) {
         http_response_code(400);
-        echo json_encode(['message' => 'Product already exists']);
+        echo json_encode(['message' => 'Product already exists.']);
         exit;
     }
 
@@ -33,7 +34,7 @@ if ($method == 'POST' && $action == 'register') {
     $result = $query->execute();
 
     http_response_code(201);
-    echo json_encode(['message' => 'Product successfully added']);
+    echo json_encode(['message' => 'Product successfully added.']);
     exit;
 
 } else if ($method == 'PUT' && $action == 'edit') {
