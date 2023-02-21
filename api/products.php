@@ -61,7 +61,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'list') {
 
-    echo $id_user;
+    echo json_encode(['id_user' => $id_user]);
     $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
 
     if (!empty($name)) {
