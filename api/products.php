@@ -77,7 +77,7 @@ if ($method == 'POST' && $action == 'register') {
             echo json_encode(['message' => 'No product']);
             exit;
         }
-    } catch(Exception $e) {
+    } catch(PDOException $e) {
         http_response_code(403);
         echo json_encode(['message' => $e]);
         exit;
