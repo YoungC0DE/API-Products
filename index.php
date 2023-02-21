@@ -1,8 +1,8 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, PUT, PATCH, GET, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: *');
-header('Content-type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, PUT, GET, DELETE");
+header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding");
+header("Content-type: application/json");
 
 date_default_timezone_set("America/Sao_Paulo");
 
@@ -34,7 +34,7 @@ $param = isset($path[3]) ? $path[3] : '';
 include_once "config/connection.php";
 
 if ($api === 'products') include_once "api/products.php";
-if ($api === 'user') include_once "api/users.php";
+if ($api === 'users') include_once "api/users.php";
 else {
     http_response_code(404);
     echo json_encode(['message' => 'Not found']);
