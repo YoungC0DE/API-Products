@@ -60,13 +60,13 @@ if ($method == 'POST' && $action == 'register') {
     exit;
 
 } else if ($method == 'GET' && $action == 'list') {
-    $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user";
 
-    // if (!empty($name)) {
-    //     $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'";
-    // }
+    $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
 
-    $query = $db->prepare("$stringQuery");
+    if (!empty($name)) {
+        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
+    }
+
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
