@@ -1,67 +1,119 @@
-# API Produtos
+# API Products
 
-> Fiz essa api para aprender um pouco sobre PHP 
-> e me desenvolver nesta linguagem que é muito utilizada.
+> I do this API to learn about PHP
+> and improviment myself
 
-Nesta API teremos as seguintes funcionalidades:
+In this API we have some functionalities
 
-| metodo | end point          |
+| method | end point          |
 |--------|--------------------|
-| [POST] |  /usuarios/register |
-| [POST] |  /usuarios/login |
-| [POST] |  /produtos/register/{id_usuario} |
-| [GET]  |  /produtos/list/{id_usuario} |
-| [GET]  |  /produtos/total/{id_usuario} |
-| [DELETE] |  /produtos/detete/{id_usuario} |
-| [DELETE] |  /usuario/detete |
+| [POST] | /users/register    | 
+| [POST] | /users/login       |
+| [POST] | /products/register |
+| [PUT]  | /users/edit        |
+| [PUT]  | /products/edit     |
+| [GET]  | /products/list     |
+| [GET]  | /products/list/{id}|
+| [GET]  | /products/total    |
+| [DELETE] | /products/detete |
+| [DELETE] | /usuario/detete  |
 
 url_base: https://apiprodutosphp.dev.br
 
-É necessário estar logado antes de consumir os outros end-points, 
-pois o sistema irá trazer os produtos com base no usuario logado.
+It is necessary to be logged in before consuming the other endpoints,
+because the system will bring the products based on the logged in user.
 
-Este projeto servirá como uma lista de compras, 
-ajudando a organizar algum carrinho de compras.
+This project will serve as a shopping list,
+helping to organize your shopping cart.
 
-### schema para o endpoint **/produtos/register/**
+## 
+
+### schema to endpoint **(POST)/products/register**
 ```json 
   {
-    "id_usuario": 1,
-    "nome": "Arroz",
-    "quantidade": 2,
-    "medida": "Pacotes",
-    "valor": 3.50
+    "id_user": 1,     // required
+    "name": "Rice",   // required
+    "amount": 2,      // required
+    "metric": "units",// required
+    "value": 3.50     // required
   }
 ```
 
-### schema para o endpoint **/produtos/delete/{id_produto}**
+### schema to endpoint **(PUT)/products/edit**
 ```json 
   {
-    "id_user": 1,
+    "id_user": 1,     // required
+    "id_prod": 1,     // required
+    "name": "Rice",   // optional
+    "amount": 2,      // optional
+    "metric": "units",// optional
+    "value": 3.50     // optional
   }
 ```
 
-### schema para o endpoint **/usuarios/register/**
+### schema to endpoint **(GET)/products/list**
 ```json 
   {
-    "nome": "usuario",
-    "email": "exemplo@email.com",
-    "senha": "12345"
+    "id_user": 1,  // required
+    "id_prod": 1   // optional
   }
 ```
 
-### schema para o endpoint **/usuarios/login/**
+### schema to endpoint **(GET)/products/total**
 ```json 
   {
-    "email": "exemplo@email.com",
-    "senha": "12345",
+    "id_user": 1   // required
   }
 ```
 
-### schema para o endpoint **/usuarios/delete/**
+### schema to endpoint **(DELETE)/products/delete**
 ```json 
   {
-    "email": "exemplo@email.com",
-    "senha": "12345",
+    "id_user": 1,  // required
+    "id_prod": 1   // required
+  }
+```
+
+##
+
+### schema to endpoint **(POST)/users/login**
+```json 
+  {
+    "email": "example@email.com", // required
+    "password": "mypass"          // required
+  }
+```
+
+### schema to endpoint **(POST)/users/register**
+```json 
+  {
+    "name": "Your name",          // required
+    "email": "example@email.com", // required
+    "password": "mypass"          // required
+  }
+```
+
+### schema to endpoint **(PUT)/users/edit**
+```json 
+  {
+    "name": "Your name",           // optional
+    "email": "example@email.com",  // optional
+    "password": "mypass",          // optional
+    "avatar": "https://yourimage"  // optional
+  }
+```
+
+### schema to endpoint **(GET)/users/list**
+```json 
+  {
+    "id_user": 1  // optional
+  }
+```
+
+### schema to endpoint **(DELETE)/users/delete**
+```json 
+  {
+    "email": "example@email.com",
+    "password": "mypass"
   }
 ```

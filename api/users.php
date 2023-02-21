@@ -10,11 +10,11 @@ $data = json_decode(file_get_contents('php://input'));
 $remov = array("'", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-$id_user  = !empty($data->id_user) ? intval(trim($data->id_user)) : '';
+$id_user  = !empty($data->id_user)  ? intval(trim($data->id_user)) : '';
 $name     = !empty($data->name)     ? trim(str_replace($remov, "", $data->name)) : '';
 $email    = !empty($data->email)    ? trim(strtolower(str_replace($remov, "", $data->email))) : '';
 $password = !empty($data->password) ? base64_encode(trim(str_replace($remov, "", $data->password))) :  '';
-$avatar   = !empty($data->avatar)   ?? 'https://www.acnmoda.com.br/img/user-default.png';  
+$avatar   = !empty($data->avatar)   ? $data->avatar : '';  
 
 if ($method == 'POST' && $action == 'login') {
 
@@ -60,14 +60,15 @@ if ($method == 'POST' && $action == 'login') {
 } else if ($method == 'PUT' && $action == 'edit') {
     $setters = '';
 
-    if ($name)     $setters .= ",name = '$name'";   
+    if ($name)     $setters .= ",name = '$name'";  
+    if ($email)    $setters .= ",email = '$email'"; 
     if ($password) $setters .= ",password = '$password'";
     if ($avatar)   $setters .= ",avatar = '$avatar'";
 
     $setters = ltrim($setters, ',');
 
     try {
-        $query = $db->prepare("UPDATE users SET $setters WHERE email = '$email'");
+        $query = $db->prepare("UPDATE users SET $setters WHERE ID = $id_user");
         $result = $query->execute();
     } catch(Exception $e) {
         http_response_code(403);
@@ -81,7 +82,13 @@ if ($method == 'POST' && $action == 'login') {
 
 } else if ($method == 'GET' && $action == 'list') {
 
-    $query = $db->prepare("SELECT * FROM users");
+    $stringQuery = "SELECT * FROM users";
+
+    if (!empty($id_user)) {
+        $stringQuery = "SELECT * FROM users WHERE ID = $id_user";
+    }
+
+    $query = $db->prepare($stringQuery);
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 

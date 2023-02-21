@@ -29,7 +29,7 @@ if ($method == 'POST' && $action == 'register') {
         exit;
     }
 
-    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($param, '$name', $amount, '$metric', $value)");
+    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($id_user, '$name', $amount, '$metric', $value)");
     $result = $query->execute();
 
     http_response_code(201);
@@ -60,8 +60,13 @@ if ($method == 'POST' && $action == 'register') {
     exit;
 
 } else if ($method == 'GET' && $action == 'list') {
+    $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user";
 
-    $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
+    if (!empty($param)) {
+        $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND ID = $id_prod";
+    }
+
+    $query = $db->prepare($stringQuery);
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
