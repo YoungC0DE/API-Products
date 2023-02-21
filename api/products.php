@@ -63,7 +63,7 @@ if ($method == 'POST' && $action == 'register') {
     $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user";
 
     if (!empty($name)) {
-        $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%$name%'";
+        $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'";
     }
 
     $query = $db->prepare($stringQuery);

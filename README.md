@@ -28,89 +28,89 @@ helping to organize your shopping cart.
 
 ## 
 
-### schema to endpoint **(POST)/products/register**
+### **(POST)/products/register**
 ```json 
   {
-    "id_user": 1,     // required
-    "name": "Rice",   // required
-    "amount": 2,      // required
-    "metric": "units",// required
-    "value": 3.50     // required
+    "id_user": 1,     
+    "name": "Rice",
+    "amount": 2,      
+    "metric": "units",
+    "value": 3.50     
   }
 ```
 
-### schema to endpoint **(PUT)/products/edit**
+### **(PUT)/products/edit**
 ```json 
   {
-    "id_user": 1,     // required
-    "id_prod": 1,     // required
-    "name": "Rice",   // optional
-    "amount": 2,      // optional
-    "metric": "units",// optional
-    "value": 3.50     // optional
+    "id_user": 1,    
+    "id_prod": 1,   
+    "name": "Rice",  
+    "amount": 2,      
+    "metric": "units",
+    "value": 3.50    
   }
 ```
 
-### schema to endpoint **(GET)/products/list**
+### **(GET)/products/list**
 ```json 
   {
-    "id_user": 1,  // required
-    "id_prod": 1   // optional
+    "id_user": 1, 
+    "name": "rice"   
   }
 ```
 
-### schema to endpoint **(GET)/products/total**
+### **(GET)/products/total**
 ```json 
   {
-    "id_user": 1   // required
+    "id_user": 1  
   }
 ```
 
-### schema to endpoint **(DELETE)/products/delete**
+### **(DELETE)/products/delete**
 ```json 
   {
-    "id_user": 1,  // required
-    "id_prod": 1   // required
+    "id_user": 1,  
+    "id_prod": 1  
   }
 ```
 
 ##
 
-### schema to endpoint **(POST)/users/login**
+### **(POST)/users/login**
 ```json 
   {
-    "email": "example@email.com", // required
-    "password": "mypass"          // required
+    "email": "example@email.com", 
+    "password": "mypass"          
   }
 ```
 
-### schema to endpoint **(POST)/users/register**
+### **(POST)/users/register**
 ```json 
   {
-    "name": "Your name",          // required
-    "email": "example@email.com", // required
-    "password": "mypass"          // required
+    "name": "Your name",          
+    "email": "example@email.com",
+    "password": "mypass"          
   }
 ```
 
-### schema to endpoint **(PUT)/users/edit**
+### **(PUT)/users/edit**
 ```json 
   {
-    "name": "Your name",           // optional
-    "email": "example@email.com",  // optional
-    "password": "mypass",          // optional
-    "avatar": "https://yourimage"  // optional
+    "name": "Your name",           
+    "email": "example@email.com",  
+    "password": "mypass",         
+    "avatar": "https://yourimage" 
   }
 ```
 
-### schema to endpoint **(GET)/users/list**
+### **(GET)/users/list**
 ```json 
   {
     "id_user": 1  // optional
   }
 ```
 
-### schema to endpoint **(DELETE)/users/delete**
+### **(DELETE)/users/delete**
 ```json 
   {
     "email": "example@email.com",
