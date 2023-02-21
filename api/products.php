@@ -62,22 +62,17 @@ if ($method == 'POST' && $action == 'register') {
 } else if ($method == 'GET' && $action == 'list') {
     $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user";
 
-    if (!empty($id_prod)) {
-        $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND ID = $id_prod";
+    if (!empty($name)) {
+        $stringQuery = "SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%$name%'";
     }
-    try {
-        $query = $db->prepare("$stringQuery");
-        $query->execute();
-        $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!$result) {
-            http_response_code(400);
-            echo json_encode(['message' => 'No product']);
-            exit;
-        }
-    } catch(Exception $e) {
-        http_response_code(403);
-        echo json_encode(['message' => $e]);
+    $query = $db->prepare($stringQuery);
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$result) {
+        http_response_code(400);
+        echo json_encode(['message' => 'No product']);
         exit;
     }
     
