@@ -10,8 +10,8 @@ $data = json_decode(file_get_contents('php://input'));
 $remov = array("'", ".", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-$id_prod = !empty($data->id_prod) ? intval(trim($data->id_prod)) : '';
-$id_user = !empty($data->id_user) ? intval(trim($data->id_user)) : '';
+$id_prod = !empty($data->id_prod) ? intval($data->id_prod) : '';
+$id_user = !empty($data->id_user) ? intval($data->id_user) : '';
 $name    = !empty($data->name)    ? strtolower(trim(str_replace($remov, "", $data->name))) : '';
 $amount  = !empty($data->amount)  ? intval(trim($data->amount)) : '';
 $metric  = !empty($data->metric)  ? strtolower(trim(str_replace($remov, "", $data->metric))) : '';
