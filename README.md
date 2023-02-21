@@ -106,7 +106,7 @@ helping to organize your shopping cart.
 ### **(GET)/users/list**
 ```json 
   {
-    "id_user": 1  // optional
+    "id_user": 1
   }
 ```
 
