@@ -65,9 +65,9 @@ if ($method == 'POST' && $action == 'register') {
     try {
         $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
 
-        // if (!empty($name)) {
-        //     $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
-        // }
+        if (!empty($name)) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
+        }
 
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
