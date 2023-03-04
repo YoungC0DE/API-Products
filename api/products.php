@@ -18,6 +18,10 @@ $amount  = !empty($data->amount)  ? intval(trim($data->amount)) : '';
 $metric  = !empty($data->metric)  ? strtolower(trim(str_replace($remov, "", $data->metric))) : '';
 $value   = !empty($data->value)   ? intval(trim(str_replace($remov, "", $data->value))) : '';
 
+// only for GET method ;(
+$G_id_user =  !empty($_GET['user_id']) ? intval(trim($_GET['user_id'])) : '';
+$G_prod_name =  !empty($_GET['name']) ? intval(trim($_GET['name'])) : '';
+
 if ($method == 'POST' && $action == 'register') {
 
     $query = $db->prepare("SELECT id FROM products WHERE name = '$name' and fk_user = $id_user");
@@ -60,13 +64,13 @@ if ($method == 'POST' && $action == 'register') {
     echo json_encode(['message' => 'Product was modified!']);
     exit;
 
-} else if ($method == 'GET' && $action == 'list') {
-
+} else if ($method == 'GET' && $action == 'list' && $G_id_user != '') {
+    
     try {
-        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
+        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $G_id_user");
 
-        if (!empty($name)) {
-            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name ILIKE '%".$name."%'");
+        if (!empty($G_prod_name)) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user =  $G_id_user AND name ILIKE '%".$G_prod_name."%'");
         }
 
         $query->execute();
@@ -89,7 +93,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'total') {
 
-    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $id_user");
+    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $G_id_user");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 

@@ -15,7 +15,7 @@ $id_user  = !empty($data->id_user)  ? intval(trim($data->id_user)) : '';
 $name     = !empty($data->name)     ? trim(str_replace($remov, "", $data->name)) : '';
 $email    = !empty($data->email)    ? trim(strtolower(str_replace($remov, "", $data->email))) : '';
 $password = !empty($data->password) ? base64_encode(trim(str_replace($remov, "", $data->password))) :  '';
-$avatar   = !empty($data->avatar)   ? $data->avatar : '';  
+$avatar   = !empty($data->avatar)   ? $data->avatar : '';
 
 if ($method == 'POST' && $action == 'login') {
 
@@ -81,12 +81,12 @@ if ($method == 'POST' && $action == 'login') {
     echo json_encode(['message' => 'User was modified!']);
     exit;
 
-} else if ($method == 'GET' && $action == 'list') {
+} else if ($method == 'GET' && $action == 'list' && $param == 'user_id') {
 
     $stringQuery = "SELECT * FROM users";
 
     if (!empty($id_user)) {
-        $stringQuery = "SELECT * FROM users WHERE ID = $id_user";
+        $stringQuery = "SELECT * FROM users WHERE ID = $param";
     }
 
     $query = $db->prepare($stringQuery);

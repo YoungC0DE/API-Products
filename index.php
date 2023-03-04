@@ -37,9 +37,9 @@ $action = isset($path[2]) ? $path[2] : '';
 $param = isset($path[3]) ? $path[3] : '';
 
 // LOCAL
-//$api = isset($path[0]) ? $path[0] : '';
-//$action = isset($path[1]) ? $path[1] : '';
-//$param = isset($path[2]) ? $path[2] : '';
+// $api = isset($path[0]) ? $path[0] : '';
+// $action = isset($path[1]) ? $path[1] : '';
+// $param = isset($path[2]) ? $path[2] : '';
 
 include_once "config/connection.php";
 
