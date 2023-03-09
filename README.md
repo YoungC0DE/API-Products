@@ -5,18 +5,17 @@
 
 In this API we have some functionalities
 
-| method | end point          |
-|--------|--------------------|
-| [POST] | /users/register    | 
-| [POST] | /users/login       |
-| [POST] | /products/register |
-| [PUT]  | /users/edit        |
-| [PUT]  | /products/edit     |
-| [GET]  | /products/list     |
-| [GET]  | /products/list/{id}|
-| [GET]  | /products/total    |
-| [DELETE] | /products/detete |
-| [DELETE] | /usuario/detete  |
+|       method          |     end point      |                 required params                   |
+|-----------------------|--------------------|---------------------------------------------------|
+| <code>[POST]</code>   | /users/register    | <code>name, email, password</code>                |
+| <code>[POST]</code>   | /users/login       | <code>email, user</code>                          |
+| <code>[POST]</code>   | /products/register | <code>id_user, name, amount, metric, value</code> |
+| <code>[PUT]</code>    | /users/edit        | <code>id_user</code>                              |
+| <code>[PUT]</code>    | /products/edit     | <code>id_user, id_prod</code>                     |
+| <code>[GET]</code>    | /products/list     | <code>id_user</code>                              |
+| <code>[GET]</code>    | /products/total    | <code>id_user</code>                              |
+| <code>[DELETE]</code> | /products/detete   | <code>id_prod, id_user</code>                     |
+| <code>[DELETE]</code> | /usuario/detete    | <code>id_user</code>                              |
 
 url_base: https://apiprodutosphp.dev.br
 
@@ -26,94 +25,26 @@ because the system will bring the products based on the logged in user.
 This project will serve as a shopping list,
 helping to organize your shopping cart.
 
-## 
+## /products
 
-### **(POST)/products/register**
-```json 
-  {
-    "id_user": 1,     
-    "name": "Rice",
-    "amount": 2,      
-    "metric": "units",
-    "value": 3.50     
-  }
-```
+``` (POST)/products/register?id_user=&name=&amount=&metric=&value ```
 
-### **(PUT)/products/edit**
-```json 
-  {
-    "id_user": 1,    
-    "id_prod": 1,   
-    "name": "Rice",  
-    "amount": 2,      
-    "metric": "units",
-    "value": 3.50    
-  }
-```
+``` (PUT)/products/edit?id_user=&id_prod=&name=&amount=&metric=&value ``` 
 
-### **(GET)/products/list**
-```json 
-  {
-    "id_user": 1, 
-    "name": "rice"   
-  }
-```
+``` (GET)/products/list?id_user=&name= ```
 
-### **(GET)/products/total**
-```json 
-  {
-    "id_user": 1  
-  }
-```
+``` (GET)/products/total?id_user ```
 
-### **(DELETE)/products/delete**
-```json 
-  {
-    "id_user": 1,  
-    "id_prod": 1  
-  }
-```
+``` (DELETE)/products/delete?id_user=&id_prod ```
 
-##
+## /users
 
-### **(POST)/users/login**
-```json 
-  {
-    "email": "example@email.com", 
-    "password": "mypass"          
-  }
-```
+``` (POST)/users/login?email=&password ```
 
-### **(POST)/users/register**
-```json 
-  {
-    "name": "Your name",          
-    "email": "example@email.com",
-    "password": "mypass"          
-  }
-```
+``` (POST)/users/register?name=&email=&password ```
 
-### **(PUT)/users/edit**
-```json 
-  {
-    "name": "Your name",           
-    "email": "example@email.com",  
-    "password": "mypass",         
-    "avatar": "https://yourimage" 
-  }
-```
+``` (PUT)/users/edit?name=&email=&password=&avatar ```
 
-### **(GET)/users/list**
-```json 
-  {
-    "id_user": 1
-  }
-```
+``` (GET)/users/list?id_user ```
 
-### **(DELETE)/users/delete**
-```json 
-  {
-    "email": "example@email.com",
-    "password": "mypass"
-  }
-```
+``` (DELETE)/users/delete?email=&password ```

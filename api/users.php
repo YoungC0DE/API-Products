@@ -59,6 +59,13 @@ if ($method == 'POST' && $action == 'login') {
     exit;
 
 } else if ($method == 'PUT' && $action == 'edit') {
+
+    if (empty($id_user)) {
+        http_response_code(401);
+        echo json_encode(['message' => 'User id is required']);
+        exit;
+    }
+    
     $setters = '';
 
     if ($name)     $setters .= ",name = '$name'";  
@@ -69,7 +76,7 @@ if ($method == 'POST' && $action == 'login') {
     $setters = ltrim($setters, ',');
 
     try {
-        $query = $db->prepare("UPDATE users SET $setters WHERE ID = $param");
+        $query = $db->prepare("UPDATE users SET $setters WHERE ID = $id_user");
         $result = $query->execute();
     } catch(Exception $e) {
         http_response_code(403);
@@ -102,6 +109,12 @@ if ($method == 'POST' && $action == 'login') {
     exit;
 
 } else if ($method == 'DELETE' && $action == 'delete') {
+
+    if (empty($id_user)) {
+        http_response_code(401);
+        echo json_encode(['message' => 'User id is required']);
+        exit;
+    }
 
     $query = $db->prepare("SELECT id FROM users WHERE email = '$email' AND password = '$password'");
     $query->execute();

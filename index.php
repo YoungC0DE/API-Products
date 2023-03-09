@@ -25,7 +25,7 @@ if (!isset($_GET['path'])) {
     http_response_code(404);
     echo json_encode(['message' => 'Not found']);
 }
-// domain/api/action/{param}
+// domain/api/action
 $path = explode("/", $_GET['path']);
 
 // POST, GET, DELETE, PUT

@@ -62,7 +62,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'list') {
 
-    if (empty($id_prod)) {
+    if (empty($id_user)) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
@@ -95,7 +95,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'total') {
 
-    if (empty($id_prod)) {
+    if (empty($id_user)) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
