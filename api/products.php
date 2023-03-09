@@ -11,25 +11,21 @@ $data = json_decode(file_get_contents('php://input'));
 $remov = array("'", ".", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-$id_prod = !empty($data->id_prod) ? intval(trim($data->id_prod)) : '';
-$id_user = !empty($data->id_user) ? intval(trim($data->id_user)) : '';
-$name    = !empty($data->name)    ? strtolower(trim(str_replace($remov, "", $data->name))) : '';
-$amount  = !empty($data->amount)  ? intval(trim($data->amount)) : '';
-$metric  = !empty($data->metric)  ? strtolower(trim(str_replace($remov, "", $data->metric))) : '';
-$value   = !empty($data->value)   ? intval(trim(str_replace($remov, "", $data->value))) : '';
-
-// only for GET method ;(
-$G_id_user =  !empty($_GET['user_id']) ? intval(trim($_GET['user_id'])) : '';
-$G_prod_name =  !empty($_GET['name']) ? intval(trim($_GET['name'])) : '';
+$id_prod = !empty($_GET['prod_id']) ? intval(trim($_GET['prod_id'])) : '';
+$id_user = !empty($_GET['user_id']) ? intval(trim($_GET['user_id'])) : '';
+$name    = !empty($_GET['name'])    ? strtolower(trim(str_replace($remov, "", $_GET['name']))) : '';
+$amount  = !empty($_GET['amount'])  ? intval(trim($_GET['amount'])) : '';
+$metric  = !empty($_GET['metric'])  ? strtolower(trim(str_replace($remov, "", $_GET['metric']))) : '';
+$value   = !empty($_GET['value'])   ? intval(trim(str_replace($remov, "", $_GET['value']))) : '';
 
 if ($method == 'POST' && $action == 'register') {
 
-    $query = $db->prepare("SELECT id FROM products WHERE name = '$name' and fk_user = $id_user");
+    $query = $db->prepare("SELECT ID FROM products WHERE name = '$name' and fk_user = $id_user");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
     if ($resultVerify) {
-        http_response_code(400);
+        http_response_code(201);
         echo json_encode(['message' => 'Product already exists.']);
         exit;
     }
@@ -55,22 +51,28 @@ if ($method == 'POST' && $action == 'register') {
         $query = $db->prepare("UPDATE products SET $setters WHERE ID = $id_prod AND fk_user = $id_user");
         $result = $query->execute();
     } catch(Exception $e) {
-        http_response_code(400);
+        http_response_code(201);
         echo json_encode(['message' => "No changes"]);
         exit;
     }
     
-    http_response_code(201);
+    http_response_code(200);
     echo json_encode(['message' => 'Product was modified!']);
     exit;
 
-} else if ($method == 'GET' && $action == 'list' && $G_id_user != '') {
-    
-    try {
-        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $G_id_user");
+} else if ($method == 'GET' && $action == 'list') {
 
-        if (!empty($G_prod_name)) {
-            $query = $db->prepare("SELECT * FROM products WHERE fk_user =  $G_id_user AND name ILIKE '%".$G_prod_name."%'");
+    if (empty($id_prod)) {
+        http_response_code(401);
+        echo json_encode(['message' => 'User id is required']);
+        exit;
+    }
+
+    try {
+        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
+
+        if (!empty($name)) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_prod AND name ILIKE '%$name%'");
         }
 
         $query->execute();
@@ -93,7 +95,13 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'total') {
 
-    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $G_id_user");
+    if (empty($id_prod)) {
+        http_response_code(401);
+        echo json_encode(['message' => 'User id is required']);
+        exit;
+    }
+
+    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $id_user");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
