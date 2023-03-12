@@ -4,9 +4,6 @@
 $db = DB::connect();
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// get all request data
-$data = json_decode(file_get_contents('php://input'));
-
 // defines what i need to replace
 $remov = array("'", "\\", "-", "(", ")");
 

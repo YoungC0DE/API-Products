@@ -4,9 +4,6 @@
 $db = DB::connect();
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// get all request data
-$data = json_decode(file_get_contents('php://input'));
-
 // defines what i need to replace
 $remov = array("'", ".", "\\", "-", "(", ")");
 
@@ -106,7 +103,7 @@ if ($method == 'POST' && $action == 'register') {
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$result) {
-        http_response_code(400);
+        http_response_code(201);
         echo json_encode(['message' => 'No product']);
         exit;
     }
@@ -121,7 +118,7 @@ if ($method == 'POST' && $action == 'register') {
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$resultVerify) {
-        http_response_code(400);
+        http_response_code(201);
         echo json_encode(['message' => 'No product']);
         exit;
     }
