@@ -5,17 +5,17 @@
 
 In this API we have some functionalities
 
-|     method     |     end point      |                 required params              |
-|----------------|--------------------|----------------------------------------------|
-| ``` POST ```   | /users/register    | ``` name, email, password ```                |
-| ``` POST ```   | /users/login       | ``` email, user ```                          |
-| ``` POST ```   | /products/register | ``` id_user, name, amount, metric, value ``` |
-| ``` PUT ```    | /users/edit        | ``` id_user ```                              |
-| ``` PUT ```    | /products/edit     | ``` id_user, id_prod ```                     |
-| ``` GET ```    | /products/list     | ``` id_user ```                              |
-| ``` GET ```    | /products/total    | ``` id_user ```                              |
-| ``` DELETE ``` | /products/detete   | ``` id_prod, id_user ```                     |
-| ``` DELETE ``` | /usuario/detete    | ``` id_user ```                              |
+| method   | end point          | required params                        |
+| -------- | ------------------ | -------------------------------------- |
+| `POST`   | /users/register    | `name, email, password`                |
+| `POST`   | /users/login       | `email, user`                          |
+| `POST`   | /products/register | `user_id, name, amount, metric, value` |
+| `PUT`    | /users/edit        | `user_id`                              |
+| `PUT`    | /products/edit     | `user_id, prod_id`                     |
+| `GET`    | /products/list     | `user_id`                              |
+| `GET`    | /products/total    | `user_id`                              |
+| `DELETE` | /products/detete   | `prod_id, user_id`                     |
+| `DELETE` | /usuario/detete    | `user_id`                              |
 
 url_base: https://apiprodutosphp.dev.br
 
@@ -27,24 +27,24 @@ helping to organize your shopping cart.
 
 ## /products
 
-(POST) ``` /products/register?id_user=&name=&amount=&metric=&value ```
+(POST) `/products/register?user_id=&name=&amount=&metric=&value`
 
-(PUT) ``` /products/edit?id_user=&id_prod=&name=&amount=&metric=&value ``` 
+(PUT) `/products/edit?user_id=&prod_id=&name=&amount=&metric=&value`
 
-(GET) ``` /products/list?id_user=&name= ```
+(GET) `/products/list?user_id=&name=`
 
-(GET) ``` /products/total?id_user ```
+(GET) `/products/total?user_id`
 
-(DELETE) ``` /products/delete?id_user=&id_prod ```
+(DELETE) `/products/delete?user_id=&prod_id`
 
 ## /users
 
-(POST) ``` /users/login?email=&password ```
+(POST) `/users/login?email=&password`
 
-(POST) ``` /users/register?name=&email=&password ```
+(POST) `/users/register?name=&email=&password`
 
-(PUT) ``` /users/edit?name=&email=&password=&avatar ```
+(PUT) `/users/edit?name=&email=&password=&avatar`
 
-(GET) ``` /users/list?id_user ```
+(GET) `/users/list?user_id`
 
-(DELETE) ``` /users/delete?email=&password ```
+(DELETE) `/users/delete?email=&password`
