@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 if (empty($_GET['path'])) {
     http_response_code(404);
-    echo json_encode(['message' => 'Not found']);
+    echo json_encode(['message' => 'Please, specify the full route. See the readme: https://github.com/YoungC0DE/API-Produtos']);
     exit;
 }
 // domain/api/action
