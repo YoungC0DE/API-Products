@@ -21,9 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-if (!isset($_GET['path'])) {
+if (empty($_GET['path'])) {
     http_response_code(404);
     echo json_encode(['message' => 'Not found']);
+    exit;
 }
 // domain/api/action
 $path = explode("/", $_GET['path']);
@@ -32,8 +33,14 @@ $path = explode("/", $_GET['path']);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // SERVER
-$api = isset($path[1]) ? $path[1] : '';
-$action = isset($path[2]) ? $path[2] : '';
+try {
+    $api = isset($path[1]) ? $path[1] : '';
+    $action = isset($path[2]) ? $path[2] : '';
+} catch(Exception $e) {
+    http_response_code(204);
+    echo json_encode(['message' => 'Please, specify the full route. See the readme: https://github.com/YoungC0DE/API-Produtos']);
+    exit;
+}
 
 // LOCAL
 // $api = isset($path[0]) ? $path[0] : '';
