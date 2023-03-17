@@ -10,7 +10,7 @@ $remov = array("'", "\\", "-", "(", ")");
 // set my variables to use on my queries
 $id_user  = !empty($_GET['user_id'])  ? intval(trim($_GET['user_id'])) : '';
 $name     = !empty($_GET['name'])     ? trim(str_replace($remov, "", $_GET['name'])) : '';
-$email    = !empty($_GET['email'])    ? trim(strtolower(str_replace($remov, "", $_GET['email']))) : '';
+$email    = !empty($_GET['email'])    ? mb_strtolower(trim(str_replace($remov, "", $_GET['email'])), 'UTF-8') : '';
 $password = !empty($_GET['password']) ? base64_encode(trim(str_replace($remov, "", $_GET['password']))) :  '';
 $avatar   = !empty($_GET['avatar'])   ? $_GET['avatar'] : '';
 
