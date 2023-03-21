@@ -4,20 +4,17 @@
 $db = DB::connect();
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// defines what i need to replace
-$remov = array("'", ".", "\\", "-", "(", ")");
-
 // set my variables to use on my queries
-$id_prod = !empty($_GET['prod_id']) ? intval(trim($_GET['prod_id'])) : '';
-$id_user = !empty($_GET['user_id']) ? intval(trim($_GET['user_id'])) : '';
-$name    = !empty($_GET['name'])    ? mb_strtolower(trim(str_replace($remov, "", $_GET['name'])), 'UTF-8') : '';
-$amount  = !empty($_GET['amount'])  ? intval(preg_replace('/[^0-9]/', '', $_GET['amount'])) : '';
-$metric  = !empty($_GET['metric'])  ? mb_strtolower(trim(str_replace($remov, "", $_GET['metric'])), 'UTF-8') : '';
-$value   = !empty($_GET['value'])   ? floatval(str_replace(',', '.', preg_replace('/(\.*)/', '', $_GET['value']))) : '';
+!empty($_GET['prod_id']) ? intval(preg_match('/\d+/', $_GET['prod_id'], $id_prod))                              : $id_prod='';
+!empty($_GET['user_id']) ? intval(preg_match('/\d+/', $_GET['user_id'], $id_user))                              : $id_user='';
+!empty($_GET['name'])    ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['name'], $name), 'UTF-8')        : $name='';
+!empty($_GET['amount'])  ? intval(preg_match('/\d+/',  $_GET['amount'], $amount))                               : $amount='';
+!empty($_GET['metric'])  ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['metric'], $metric), 'UTF-8')    : $metric='';
+!empty($_GET['value'])   ? $value=floatval(str_replace(',', '.', preg_replace('/(\.*)/', '', $_GET['value'])))  : $value='';
 
 if ($method == 'POST' && $action == 'register') {
 
-    $query = $db->prepare("SELECT ID FROM products WHERE name = '$name' and fk_user = $id_user");
+    $query = $db->prepare("SELECT ID FROM products WHERE name = '$name[0]' and fk_user = $id_user[0]");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -27,7 +24,7 @@ if ($method == 'POST' && $action == 'register') {
         exit;
     }
 
-    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($id_user, '$name', $amount, '$metric', $value)");
+    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($id_user[0], '$name[0]', $amount[0], '$metric[0]', $value)");
     $result = $query->execute();
 
     http_response_code(201);
@@ -37,15 +34,15 @@ if ($method == 'POST' && $action == 'register') {
 } else if ($method == 'PUT' && $action == 'edit') {
     $setters = '';
 
-    if ($name)   $setters .= ",name = '$name'";   
-    if ($amount) $setters .= ",amount = '$amount'";
-    if ($metric) $setters .= ",metric = '$metric'";
+    if ($name[0])   $setters .= ",name = '$name[0]'";   
+    if ($amount[0]) $setters .= ",amount = '$amount[0]'";
+    if ($metric[0]) $setters .= ",metric = '$metric[0]'";
     if ($value)  $setters .= ",value = '$value'";
 
     $setters = ltrim($setters, ',');
 
     try {
-        $query = $db->prepare("UPDATE products SET $setters WHERE ID = $id_prod AND fk_user = $id_user");
+        $query = $db->prepare("UPDATE products SET $setters WHERE ID = $id_prod AND fk_user = $id_user[0]");
         $result = $query->execute();
     } catch(Exception $e) {
         http_response_code(201);
@@ -59,17 +56,17 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'list') {
 
-    if (empty($id_user)) {
+    if (empty($id_user[0])) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
     }
 
     try {
-        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user");
+        $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user[0]");
 
-        if (!empty($name)) {
-            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user AND name LIKE '%$name%'");
+        if (!empty($name[0])) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user[0] AND name LIKE '%$name[0]%'");
         }
 
         $query->execute();
@@ -92,13 +89,13 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'GET' && $action == 'total') {
 
-    if (empty($id_user)) {
+    if (empty($id_user[0])) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
     }
 
-    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $id_user");
+    $query = $db->prepare("SELECT SUM(amount * value) as total FROM products WHERE fk_user = $id_user[0]");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -113,7 +110,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'DELETE' && $action == 'delete') {
 
-    $query = $db->prepare("SELECT id FROM products WHERE fk_user = $id_user AND ID = $id_prod");
+    $query = $db->prepare("SELECT id FROM products WHERE fk_user = $id_user[0] AND ID = $id_prod");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -123,7 +120,7 @@ if ($method == 'POST' && $action == 'register') {
         exit;
     }
 
-    $query = $db->prepare("DELETE FROM products WHERE ID = $id_prod AND fk_user = $id_user");
+    $query = $db->prepare("DELETE FROM products WHERE ID = $id_prod AND fk_user = $id_user[0]");
     $result = $query->execute();
 
     http_response_code(200);

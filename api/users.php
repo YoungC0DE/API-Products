@@ -8,11 +8,11 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $remov = array("'", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-$id_user  = !empty($_GET['user_id'])  ? intval(trim($_GET['user_id'])) : '';
-$name     = !empty($_GET['name'])     ? trim(str_replace($remov, "", $_GET['name'])) : '';
-$email    = !empty($_GET['email'])    ? mb_strtolower(trim(str_replace($remov, "", $_GET['email'])), 'UTF-8') : '';
-$password = !empty($_GET['password']) ? base64_encode(trim(str_replace($remov, "", $_GET['password']))) :  '';
-$avatar   = !empty($_GET['avatar'])   ? $_GET['avatar'] : '';
+!empty($_GET['user_id'])  ? intval(preg_match('/\d+/', $_GET['user_id'], $id_user))                       : $id_user='';
+!empty($_GET['name'])     ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['name'], $name), 'UTF-8') : $name='';
+!empty($_GET['email'])    ? $email=mb_strtolower(trim(str_replace($remov, "", $_GET['email'])), 'UTF-8')  : $email='';
+!empty($_GET['password']) ? $password=base64_encode(trim(str_replace($remov, "", $_GET['password'])))     : $password='';
+!empty($_GET['avatar'])   ? $avatar=$_GET['avatar'] : $avatar='';
 
 if ($method == 'POST' && $action == 'login') {
 
@@ -32,7 +32,7 @@ if ($method == 'POST' && $action == 'login') {
 
 } else if ($method == 'POST' && $action == 'register') {
 
-    if ($name == '' || $email == '' || $password == '') {
+    if ($name[0] == '' || $email == '' || $password == '') {
         http_response_code(403);
         echo json_encode(['message' => 'Provide all credentials']);
         exit;
@@ -48,7 +48,7 @@ if ($method == 'POST' && $action == 'login') {
         exit;
     }
 
-    $query = $db->prepare("INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password')");
+    $query = $db->prepare("INSERT INTO users (name, email, password) VALUES ('$name[0]', '$email', '$password')");
     $result = $query->execute();
 
     http_response_code(200);
@@ -57,7 +57,7 @@ if ($method == 'POST' && $action == 'login') {
 
 } else if ($method == 'PUT' && $action == 'edit') {
 
-    if (empty($id_user)) {
+    if (empty($id_user[0])) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
@@ -65,7 +65,7 @@ if ($method == 'POST' && $action == 'login') {
     
     $setters = '';
 
-    if ($name)     $setters .= ",name = '$name'";  
+    if ($name[0])     $setters .= ",name = '$name[0]'";  
     if ($email)    $setters .= ",email = '$email'"; 
     if ($password) $setters .= ",password = '$password'";
     if ($avatar)   $setters .= ",avatar = '$avatar'";
@@ -73,7 +73,7 @@ if ($method == 'POST' && $action == 'login') {
     $setters = ltrim($setters, ',');
 
     try {
-        $query = $db->prepare("UPDATE users SET $setters WHERE ID = $id_user");
+        $query = $db->prepare("UPDATE users SET $setters WHERE ID = $id_user[0]");
         $result = $query->execute();
     } catch(Exception $e) {
         http_response_code(403);
@@ -89,7 +89,7 @@ if ($method == 'POST' && $action == 'login') {
 
     $stringQuery = "SELECT * FROM users";
 
-    if (!empty($id_user)) $stringQuery = "SELECT * FROM users WHERE ID = $id_user";
+    if (!empty($id_user[0])) $stringQuery = "SELECT * FROM users WHERE ID = $id_user[0]";
 
     $query = $db->prepare($stringQuery);
     $query->execute();
@@ -107,7 +107,7 @@ if ($method == 'POST' && $action == 'login') {
 
 } else if ($method == 'DELETE' && $action == 'delete') {
 
-    if (empty($id_user)) {
+    if (empty($id_user[0])) {
         http_response_code(401);
         echo json_encode(['message' => 'User id is required']);
         exit;
