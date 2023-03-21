@@ -10,7 +10,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 !empty($_GET['name'])    ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['name'], $name), 'UTF-8')        : $name='';
 !empty($_GET['amount'])  ? intval(preg_match('/\d+/',  $_GET['amount'], $amount))                               : $amount='';
 !empty($_GET['metric'])  ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['metric'], $metric), 'UTF-8')    : $metric='';
-!empty($_GET['value'])   ? $value=floatval(str_replace(',', '.', preg_replace('/(\.*)/', '', $_GET['value'])))  : $value='';
+!empty($_GET['value'])   ? $value=floatval(str_replace(',', '.', $_GET['value']))  : $value='';
 
 if ($method == 'POST' && $action == 'register') {
 
