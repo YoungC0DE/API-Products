@@ -42,7 +42,7 @@ if ($method == 'POST' && $action == 'register') {
     $setters = ltrim($setters, ',');
 
     try {
-        $query = $db->prepare("UPDATE products SET $setters WHERE ID = $id_prod AND fk_user = $id_user[0]");
+        $query = $db->prepare("UPDATE products SET $setters WHERE ID = $id_prod[0] AND fk_user = $id_user[0]");
         $result = $query->execute();
     } catch(Exception $e) {
         http_response_code(201);
@@ -110,7 +110,7 @@ if ($method == 'POST' && $action == 'register') {
 
 } else if ($method == 'DELETE' && $action == 'delete') {
 
-    $query = $db->prepare("SELECT id FROM products WHERE fk_user = $id_user[0] AND ID = $id_prod");
+    $query = $db->prepare("SELECT id FROM products WHERE fk_user = $id_user[0] AND ID = $id_prod[0]");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -120,7 +120,7 @@ if ($method == 'POST' && $action == 'register') {
         exit;
     }
 
-    $query = $db->prepare("DELETE FROM products WHERE ID = $id_prod AND fk_user = $id_user[0]");
+    $query = $db->prepare("DELETE FROM products WHERE ID = $id_prod[0] AND fk_user = $id_user[0]");
     $result = $query->execute();
 
     http_response_code(200);
