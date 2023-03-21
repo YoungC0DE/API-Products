@@ -13,7 +13,7 @@ $id_user = !empty($_GET['user_id']) ? intval(trim($_GET['user_id'])) : '';
 $name    = !empty($_GET['name'])    ? mb_strtolower(trim(str_replace($remov, "", $_GET['name'])), 'UTF-8') : '';
 $amount  = !empty($_GET['amount'])  ? intval(preg_replace('/[^0-9]/', '', $_GET['amount'])) : '';
 $metric  = !empty($_GET['metric'])  ? mb_strtolower(trim(str_replace($remov, "", $_GET['metric'])), 'UTF-8') : '';
-$value   = !empty($_GET['value'])   ? floatval(preg_replace('/[^0-9]/', '', $_GET['value'])) : '';
+$value   = !empty($_GET['value'])   ? floatval(str_replace(',', '.', preg_replace('/(\.*)/', '', $_GET['value']))) : '';
 
 if ($method == 'POST' && $action == 'register') {
 
