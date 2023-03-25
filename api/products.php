@@ -104,8 +104,9 @@ if ($method == 'POST' && $action == 'register') {
         echo json_encode(['message' => 'No product']);
         exit;
     }
+
     http_response_code(200);
-    echo json_encode(['message' => 'Successful query', 'data' => $result]);
+    echo json_encode(['message' => 'Successful query', 'data' => number_format($result[0]['total'], 2, '.', '')]);
     exit;
 
 } else if ($method == 'DELETE' && $action == 'delete') {
