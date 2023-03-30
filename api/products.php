@@ -7,7 +7,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // set my variables to use on my queries
 !empty($_GET['prod_id']) ? intval(preg_match('/\d+/', $_GET['prod_id'], $id_prod))                         : $id_prod='';
 !empty($_GET['user_id']) ? intval(preg_match('/\d+/', $_GET['user_id'], $id_user))                         : $id_user='';
-!empty($_GET['name'])    ? $name=mb_strtolower(preg_replace("/[^\wç]/iu", "", $_GET['name']), 'UTF-8')      : $name='';
+!empty($_GET['name'])    ? $name=mb_strtolower(preg_replace("/[^\w\s]/u", "", $_GET['name']), 'UTF-8')     : $name='';
 !empty($_GET['amount'])  ? intval(preg_match('/\d+/',  $_GET['amount'], $amount))                          : $amount='';
 !empty($_GET['metric'])  ? $metric=mb_strtolower(preg_replace('/[^\wç]/iu', "", $_GET['metric']), 'UTF-8') : $metric='';
 !empty($_GET['value'])   ? $value=floatval(str_replace(',', '.', $_GET['value']))                          : $value='';
