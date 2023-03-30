@@ -14,7 +14,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if ($method == 'POST' && $action == 'register') {
 
-    $query = $db->prepare("SELECT ID FROM products WHERE name = '$name[0]' and fk_user = $id_user[0]");
+    $query = $db->prepare("SELECT ID FROM products WHERE name = '$name' and fk_user = $id_user[0]");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -24,7 +24,7 @@ if ($method == 'POST' && $action == 'register') {
         exit;
     }
 
-    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($id_user[0], '$name[0]', $amount[0], '$metric[0]', $value)");
+    $query = $db->prepare("INSERT INTO products (fk_user, name, amount, metric, value) VALUES ($id_user[0], '$name', $amount[0], '$metric', $value)");
     $result = $query->execute();
 
     http_response_code(201);
@@ -34,9 +34,9 @@ if ($method == 'POST' && $action == 'register') {
 } else if ($method == 'PUT' && $action == 'edit') {
     $setters = '';
 
-    if ($name[0])   $setters .= ",name = '$name[0]'";   
+    if ($name)   $setters .= ",name = '$name'";   
     if ($amount[0]) $setters .= ",amount = '$amount[0]'";
-    if ($metric[0]) $setters .= ",metric = '$metric[0]'";
+    if ($metric) $setters .= ",metric = '$metric'";
     if ($value)  $setters .= ",value = '$value'";
 
     $setters = ltrim($setters, ',');
@@ -65,8 +65,8 @@ if ($method == 'POST' && $action == 'register') {
     try {
         $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user[0]");
 
-        if (!empty($name[0])) {
-            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user[0] AND name LIKE '%$name[0]%'");
+        if (!empty($name)) {
+            $query = $db->prepare("SELECT * FROM products WHERE fk_user = $id_user[0] AND name LIKE '%$name%'");
         }
 
         $query->execute();
