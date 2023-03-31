@@ -118,7 +118,7 @@ if ($method == 'POST' && $action == 'login') {
     }
 
     if ($resultVerify[0]['level'] && !empty($id_user[0])) {
-    	$query = $db->prepare("DELETE FROM users WHERE ID = $user_id[0]");
+    	$query = $db->prepare("DELETE FROM users WHERE ID = $id_user[0]");
     	$result = $query->execute();
 
     	http_response_code(200);
