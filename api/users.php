@@ -107,13 +107,7 @@ if ($method == 'POST' && $action == 'login') {
 
 } else if ($method == 'DELETE' && $action == 'delete') {
 
-    if (empty($id_user[0])) {
-        http_response_code(401);
-        echo json_encode(['message' => 'User id is required']);
-        exit;
-    }
-
-    $query = $db->prepare("SELECT id FROM users WHERE email = '$email' AND password = '$password'");
+    $query = $db->prepare("SELECT level FROM users WHERE email = '$email' AND password = '$password'");
     $query->execute();
     $resultVerify = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -121,6 +115,15 @@ if ($method == 'POST' && $action == 'login') {
         http_response_code(401);
         echo json_encode(['message' => 'User not exists']);
         exit;
+    }
+
+    if ($resultVerify[0]['level'] && !empty($id_user[0])) {
+    	$query = $db->prepare("DELETE FROM users WHERE ID = $user_id[0]");
+    	$result = $query->execute();
+
+    	http_response_code(200);
+    	echo json_encode(['message' => 'Account was deleted']);
+    	exit;
     }
 
     $query = $db->prepare("DELETE FROM users WHERE email = '$email' AND password = '$password'");
