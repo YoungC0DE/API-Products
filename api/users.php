@@ -8,11 +8,11 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $remov = array("'", "\\", "-", "(", ")");
 
 // set my variables to use on my queries
-!empty($_GET['user_id'])  ? intval(preg_match('/\d+/', $_GET['user_id'], $id_user))                       : $id_user='';
-!empty($_GET['name'])     ? mb_strtolower(preg_match('/[a-zA-Zá-úÁ-Ú]+/', $_GET['name'], $name), 'UTF-8') : $name='';
-!empty($_GET['email'])    ? $email=mb_strtolower(trim(str_replace($remov, "", $_GET['email'])), 'UTF-8')  : $email='';
-!empty($_GET['password']) ? $password=base64_encode(trim(str_replace($remov, "", $_GET['password'])))     : $password='';
-!empty($_GET['avatar'])   ? $avatar=$_GET['avatar'] : $avatar='';
+!empty($_GET['user_id'])  ? intval(preg_match('/\d+/', $_GET['user_id'], $id_user))                      : $id_user='';
+!empty($_GET['name'])     ? $name=preg_replace("/[^\w\s]/u", "", $_GET['name'])                          : $name='';
+!empty($_GET['email'])    ? $email=mb_strtolower(trim(str_replace($remov, "", $_GET['email'])), 'UTF-8') : $email='';
+!empty($_GET['password']) ? $password=base64_encode(str_replace($remov, "", $_GET['password']))          : $password='';
+!empty($_GET['avatar'])   ? $avatar=$_GET['avatar']                                                      : $avatar='';
 
 if ($method == 'POST' && $action == 'login') {
 
