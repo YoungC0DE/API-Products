@@ -48,7 +48,7 @@ if ($method == 'POST' && $action == 'login') {
         exit;
     }
 
-    $query = $db->prepare("INSERT INTO users (name, email, password) VALUES ('$name[0]', '$email', '$password')");
+    $query = $db->prepare("INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password')");
     $result = $query->execute();
 
     http_response_code(200);
@@ -65,7 +65,7 @@ if ($method == 'POST' && $action == 'login') {
     
     $setters = '';
 
-    if ($name[0])     $setters .= ",name = '$name[0]'";  
+    if ($name)  $setters .= ",name = '$name'";  
     if ($email)    $setters .= ",email = '$email'"; 
     if ($password) $setters .= ",password = '$password'";
     if ($avatar)   $setters .= ",avatar = '$avatar'";
